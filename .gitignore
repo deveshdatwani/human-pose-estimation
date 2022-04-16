@@ -10,6 +10,8 @@ __pycache__/
 /images/
 images/
 images
+FLIC/
+FLIC
 
 # Distribution / packaging
 .Python
