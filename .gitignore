@@ -13,6 +13,9 @@ images
 FLIC/
 FLIC
 
+# Model weights
+*.h5
+
 # Distribution / packaging
 .Python
 build/
