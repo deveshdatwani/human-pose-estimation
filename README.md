@@ -47,3 +47,69 @@ accuracy in the Model Evaluation section.
 Intuitively, as we increase this threshold, the size of the diameter would become larger and consequently,
 the detection rates would also go up. How we choose this threshold factor is entirely up to us, but
 DeepPose suggests a maximum value of 0.3.
+
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/POS3.png"></p> 
+
+
+### Method 
+
+APPROACH:
+There are two approaches for human pose estimation with machine learning.
+1. Bottom-up: Estimate body joints in a given image frame and then build up the human pose.
+2. Top down: To detect a human being in the image frame first and then build on the model to
+estimate body joint locations.
+In our project, we went for the bottom-up approach as proposed by the DeepPose paper, but also because
+it’s a computationally cheaper task which fits our system capabilities and resources.
+DATASET:
+We trained our model on the FLIC dataset created by Sapp, Benjamin and Ben Taskar. It contains 5003
+annotated images from Hollywood movies. The annotations of each image in this dataset contains
+a. x,y coordinates of 29 joints of a human body
+b. c: centre coordinates of the human in picture
+c. image name
+d. scale of the human in picture
+MODEL:
+We started with building an AlexNet from scratch with Tensorflow and Keras libraries.
+An AlexNet consists of 5 convolution layers which take an input of 227x227x3 dimensioned RGB image.
+Each convolution layer is preceded by batch normalisation for faster convergence and therefore quicker
+training. There are two pooling layers as shown in the image above. Each fully connected layer is
+succeeded by a dropout layer. Our modification to this model was to replace the output layer with a 58
+node fully connected layer to fit our dataset annotation style. The activation for this layer was changed to
+linear from softmax as we’re regressing and not classifying anymore (which AlexNet was built for).
+
+
+### Training 
+
+TRAINING PARAMETERS:
+Epochs = 100
+Batch Size = 32
+Optimizer = Adam
+Learning Rate = 0.0001
+Loss = Mean Squared Error
+Training Data Size = 4002 Images
+Validation Data Size = 1001 Images
+As mentioned in the methodology, the training was conducted on Google Collab with the help of GPU
+acceleration service which brought training time by approximately 5 times.
+
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/THRESHOLD.png"></p> 
+
+We observed the following results after the 100th epoch
+Total training time ~ 5 hours
+Mean squared error ~ 400
+Root mean squared error ~ 20
+
+### Model Evaluation
+
+We decided to test our model on the validation set and push out images to observe the estimations. Some
+of the results can be seen below in
+
+It is important to note that the body joints that are not visible in the frame, were annotated as [-1,-1]. And
+if the regressor estimated values close to that, the model plot scatter points at those joints.
+From the above estimations, it can be observed that the model has learnt a human body shape and is good
+at regressing it. However, estimations of some joints were still offset by quite a large margin.
+The PCP metric is explained in the Metric section above. We selected 4 thresholds and calculated PCP for
+each body joint for our 1001 validation dataset. The detection rate is represented by values on the y axis.
+It is to be noted that our model performs poorly compared to the DeepPose model as DeepPose CNN has
+been cascaded which is explained in section “Stage 2” later in this report.
+
+
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/SCREENTEST.png"></p> 
