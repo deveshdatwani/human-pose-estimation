@@ -124,3 +124,36 @@ outside the threshold diameter
 <p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/THRESHOLD.png"></p> 
 <p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/POSETEST.png"></p> 
 
+### Stage 2
+
+With the current pipeline, there is a large error in detection rates which may not be ideal. This is solved by
+DeepPose’s second proposal which essentially suggests to cascade the model with subsets of the images
+to fine tune filter parameters.
+
+The process is as follows:
+1. Train the model with all the images in training dataset
+2. Pass the cropped subset of each image around the joint to the model again
+3. Repeat for all 29 joints
+The steps above fine tune the model to learn the intricate details of body joint shapes and hence reduce
+the loss in estimation.
+Let’s explain what the process means. After a forward pass, the model estimates each joint coordinate and
+pushes out an x,y value for each joint. Next, for each joint, a subset of the image depicted by red dotted
+lines in Figure 9, is passed to the model again. Each subset contains one joint. The normalised coordinates
+of the ground truth are sent to the model along with the cropped image.
+This forces the model to learn the intricate details of joint shapes.
+The problem with this approach is the training time. Training our model for 100 epochs took nearly 5
+hours to complete on Google Colab. This equals to 300 minutes. 100 epochs on 29 joints would
+essentially require 29 * 100 * 300 minutes. We do not have the time or Google Colab resources to do that.
+Hence, we tried to run 10 epochs for each joint and saw no real improvements. For this reason, we
+decided to move stage 2 to the future scope of our project since it does not fit with the current scope.
+
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/CASCADE.png"></p> 
+
+### Performance 
+
+Our model was tested on a 10th generation Intel i5 Asus ultrabook which doesn’t have a dedicated GPU.
+The estimation task required around 0.08 seconds which would translate to ~ 11 frames per second.
+This essentially means that our model can run well on a system with a dedicated GPU to detect body
+joints at real time (30 frames per second) since a GPU accelerates a forward pass by a large factor.
+
+Intel i5 without GPU =>  11 frames per second
