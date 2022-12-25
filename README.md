@@ -15,6 +15,8 @@ many applications, some of them could be;
 scDeep learning based classifiers and localisers are currently the most trending tool for object detection and tracking tasks. As a result of this, DNNs have seen rapid improvements in the last decade. Our project implements the model suggested by DeepPose which is an AlexNet with a regressor as the final layer as opposed to a classifier. DeepPose aims to take a holistic view of the human pose estimation problem and turn it into a joint regression problem.
 There are two advantages to this approach. One, the network is capable of formulating the full context of the joint in each image; each joint uses the full image signal for regressing. This means that there is no need to separately model for each joint in the image frame. Second, the method is simpler compared to graphical models which need a human pose topology to predict interactions between body joints. In this report, we start by explaining the literature survey we carried out, our reasons for the chosen model for human pose estimation task, dataset selection and we finally then share our results.
 
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/CNNPOSE2.png"></p> 
+
 ### Model
 
 We started with building an AlexNet from scratch with Tensorflow and Keras libraries. An AlexNet consists of 5 convolution layers which take an input of 227x227x3 dimensioned RGB image.
@@ -23,6 +25,8 @@ training. There are two pooling layers as shown in the image above. Each fully c
 succeeded by a dropout layer. Our modification to this model was to replace the output layer with a 58
 node fully connected layer to fit our dataset annotation style. The activation for this layer was changed to
 linear from softmax as we’re regressing and not classifying anymore (which AlexNet was built for).
+
+<p align="center"><img src="https://github.com/deveshdatwani/human-pose-estimation/blob/main/assets/CNNPose.png"></p> 
 
 ### Metric
 
