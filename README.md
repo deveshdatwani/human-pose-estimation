@@ -23,3 +23,23 @@ training. There are two pooling layers as shown in the image above. Each fully c
 succeeded by a dropout layer. Our modification to this model was to replace the output layer with a 58
 node fully connected layer to fit our dataset annotation style. The activation for this layer was changed to
 linear from softmax as we’re regressing and not classifying anymore (which AlexNet was built for).
+
+### Metric
+
+So how can we evaluate our model accuracies? DeepPose suggests a metric for human pose estimation
+called the PCP (percentage of correct parts).
+The PCP metric says that if an estimated joint coordinate is no more than x units away from the ground
+truth, the body joint is correctly detected. So how can we calculate “x”? X is calculated by thresholding
+the torso diameter of the human in the image frame.
+For example, let’s say an image has a human whose torso diameter is 50 units (50 pixels). Torso diameter
+can be calculated by finding the euclidean distance between diagonally opposite shoulder and hip joints.
+Figure 3 tries to schematically represent this.
+Once this is done, we can threshold this distance by a factor. Let’s say we choose a factor of 0.3. This
+would mean that if a joint is estimated in the 0.3 * (torso diameter) diameter, the joint would be classified
+as correctly identified/detected. This would give us a boolean value for each joint estimation answering
+the question; “was the joint localised correctly?”. This approach converts a regression task into a
+classification task where accuracies / detection rates can be calculated. We’ve discussed our model
+accuracy in the Model Evaluation section.
+Intuitively, as we increase this threshold, the size of the diameter would become larger and consequently,
+the detection rates would also go up. How we choose this threshold factor is entirely up to us, but
+DeepPose suggests a maximum value of 0.3.
