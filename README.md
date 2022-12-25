@@ -113,3 +113,14 @@ been cascaded which is explained in section “Stage 2” later in this report.
 
 
 <p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/SCREENTEST.png"></p> 
+
+It was intuitive that the PCP metric increased as we increased the threshold factor.
+Let’s further visualise what this means. Let’s take a look at the estimation in Figure 7. The right shoulder
+estimate was offset by some value. We set a threshold of 0.2 of the torso diameter, we can draw a circle
+on each joint with that value. If the joint estimation lies in that diameter, it means that the joint was
+correctly estimated. In Figure 7, the right shoulder is not correctly estimated since the estimation lies
+outside the threshold diameter
+
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/THRESHOLD.png"></p> 
+<p align="center"><img src="https://raw.githubusercontent.com/deveshdatwani/human-pose-estimation/main/assets/POSETEST.png"></p> 
+
